@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Builder Leaderboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fefefe;
+        }
+        table {
+            width: 60%;
+            margin: 2rem auto;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #f3f3f3;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .note {
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Builder Total Time Leaderboard</h1>
+
+    <div style="text-align: center; margin-bottom: 20px;">
+        <a href="{% url 'submit_build_time' %}">
+            <button type="button">Submit Build Time</button>
+        </a>
+
+        <a href="{% url 'subassembly_records' %}">
+            <button type="button">View Subassembly Records</button>
+        </a>
+    </div>
+
+    <table>
+        <tr>
+            <th>Rank</th>
+            <th>Builder</th>
+            <th>Total Time (min)</th>
+        </tr>
+        {% for entry in leaderboard %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td style="text-align: left; padding-left: 175px;">
+                <a href="{% url 'builder_stats' entry.builder.id %}">{{ entry.builder }}</a>
+            </td>
+            <td>{{ entry.total_time|floatformat:"-0" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="2">No data available yet.</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="note">
+        * Builders with an asterisk have not completed all subassemblies. Penalty time has been applied.
+    </div>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ builder.name }}'s Build Times</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #fefefe; padding: 2rem; }
+        table { width: 80%; margin: 1rem auto; border-collapse: collapse; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: center; }
+        th { background-color: #f3f3f3; }
+        h1 { text-align: center; }
+        a.back { display: block; text-align: center; margin-top: 1rem; text-decoration: none; }
+        .muted { color: #777; }
+    </style>
+</head>
+<body>
+    <h1>{{ builder.name }}'s Sub Assemblies</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Subassembly</th>
+                <th>Your Time (min)</th>
+                <th>Date</th>
+                <th>Time Behind Best (min)</th>
+                <th>Signed Off By</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for record in records %}
+            <tr>
+                <td>{{ record.subassembly }}</td>
+
+                <td>
+                    {% if record.builder_time is not None %}
+                        {{ record.builder_time|floatformat:"-0" }}
+                    {% else %}
+                        <span class="muted">no time</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if record.build_date %}
+                        {{ record.build_date|date:"M j, Y" }}
+                    {% else %}
+                        <span class="muted">-</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if record.has_time_behind %}
+                        {% if record.is_record_holder %}
+                            🥇
+                        {% else %}
+                            +{{ record.time_behind|floatformat:"-0" }}
+                        {% endif %}
+                    {% else %}
+                        <span class="muted">-</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if record.signed_off_by %}
+                        {{ record.signed_off_by }}
+                    {% else %}
+                        <span class="muted">-</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5">No subassemblies found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="back" href="{% url 'leaderboard' %}">← Back to Leaderboard</a>
+</body>
+</html>

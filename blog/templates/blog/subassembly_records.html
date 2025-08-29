@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sub Assembly Records</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fefefe;
+            padding: 2rem;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        table {
+            width: 70%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #f3f3f3;
+        }
+        .nav {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .nav a {
+            margin: 0 10px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="{% url 'leaderboard' %}">← Back to Leaderboard</a>
+        <a href="{% url 'submit_build_time' %}">Submit Time</a>
+    </div>
+
+    <h1>Sub Assembly Record Holders</h1>
+
+    <table>
+        <tr>
+            <th>Subassembly</th>
+            <th>Fastest Builder</th>
+            <th>Time (min)</th>
+            <th>Date</th>
+        </tr>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.subassembly }}</td>
+            <td>{{ record.builder }}</td>
+            <td>{{ record.time|floatformat:"-0" }}</td>
+            <td>{{ record.date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
